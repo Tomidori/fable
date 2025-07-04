@@ -67,11 +67,13 @@ public final class SkillManager {
     }
 
     public boolean cancelCastingSkill() {
-        return isCastingSkill() && stopCastingSkill(skillInstance, false);
+        return isCastingSkill() &&
+                stopCastingSkill(skillInstance, false);
     }
 
     public boolean interruptCastingSkill() {
-        return isCastingSkill() && stopCastingSkill(skillInstance, true);
+        return isCastingSkill() &&
+                stopCastingSkill(skillInstance, true);
     }
 
     @ApiStatus.Internal
