@@ -46,6 +46,10 @@ public final class SkillManager {
         return skillInstance != null;
     }
 
+    public @Nullable SkillInstance getSkillInstance() {
+        return skillInstance;
+    }
+
     public SkillResponse canCastSkill(RegistryEntry<Skill> skill) {
         Objects.requireNonNull(skill);
         return skill.value().getCondition().check(skillContext(skill));
