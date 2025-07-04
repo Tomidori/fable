@@ -76,6 +76,15 @@ public final class SkillManager {
                 stopCastingSkill(skillInstance, true);
     }
 
+    public boolean terminateCastingSkill() {
+        if (!isCastingSkill()) {
+            return false;
+        }
+
+        endCastingSkill(skillInstance);
+        return true;
+    }
+
     @ApiStatus.Internal
     public void update() {
         updateSkillCooldowns();

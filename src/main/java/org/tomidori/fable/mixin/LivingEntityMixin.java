@@ -1,6 +1,7 @@
 package org.tomidori.fable.mixin;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,5 +29,10 @@ public abstract class LivingEntityMixin implements LivingEntityHook {
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void fable$tick(CallbackInfo ci) {
         fable$skillManager.update();
+    }
+
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "net/minecraft/world/World.sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"))
+    private void fable$onDeath(DamageSource damageSource, CallbackInfo ci) {
+        fable$skillManager.terminateCastingSkill();
     }
 }
