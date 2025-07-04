@@ -17,6 +17,13 @@
   "mixins": [
     "fable.mixins.json"
   ],
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1309": [
+        "org/tomidori/fable/entity/LivingEntityHook"
+      ]
+    }
+  },
   "depends": {
     "minecraft": ">=${minecraft_version}",
     "fabricloader": ">=${fabric_loader_version}",
