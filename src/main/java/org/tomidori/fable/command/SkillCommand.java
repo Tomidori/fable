@@ -36,6 +36,9 @@ public final class SkillCommand {
     private static final Dynamic3CommandExceptionType CAST_FAILURE_EXCEPTION = new Dynamic3CommandExceptionType((entityName, skillName, reason) ->
             Text.translatable("commands.skill.cast.failure", entityName, skillName, reason)
     );
+    private static final DynamicCommandExceptionType TERMINATE_FAILURE_EXCEPTION = new DynamicCommandExceptionType(entityName ->
+            Text.translatable("commands.skill.terminate.failure", entityName)
+    );
 
     @ApiStatus.Internal
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
@@ -46,7 +49,8 @@ public final class SkillCommand {
         return CommandManager.literal("skill")
                 .requires(source -> source.hasPermissionLevel(2))
                 .then(argumentTest())
-                .then(argumentCast());
+                .then(argumentCast())
+                .then(argumentTerminate());
     }
 
     private static LiteralArgumentBuilder<ServerCommandSource> argumentTest() {
@@ -109,6 +113,25 @@ public final class SkillCommand {
                 );
     }
 
+    private static LiteralArgumentBuilder<ServerCommandSource> argumentTerminate() {
+        return CommandManager.literal("terminate")
+                .executes(context ->
+                        executeTerminate(
+                                context.getSource(),
+                                List.of(context.getSource().getEntityOrThrow())
+                        )
+                )
+                .then(
+                        CommandManager.argument("targets", EntityArgumentType.entities())
+                                .executes(context ->
+                                        executeTerminate(
+                                                context.getSource(),
+                                                EntityArgumentType.getEntities(context, "targets")
+                                        )
+                                )
+                );
+    }
+
     private static int executeTest(
             ServerCommandSource source,
             RegistryEntry<Skill> skill,
@@ -144,6 +167,25 @@ public final class SkillCommand {
             source.sendFeedback(() -> Text.translatable("commands.skill.cast.success.single", targets.iterator().next().getName(), skill.value().getName()), true);
         } else {
             source.sendFeedback(() -> Text.translatable("commands.skill.cast.success.multiple", targets.size(), skill.value().getName()), true);
+        }
+
+        return targets.size();
+    }
+
+    private static int executeTerminate(
+            ServerCommandSource source,
+            Collection<? extends Entity> targets
+    ) throws CommandSyntaxException {
+        for (Entity target : targets) {
+            if (!getLivingEntity(target).getSkillManager().terminateCastingSkill()) {
+                throw TERMINATE_FAILURE_EXCEPTION.create(target.getName());
+            }
+        }
+
+        if (targets.size() == 1) {
+            source.sendFeedback(() -> Text.translatable("commands.skill.terminate.success.single", targets.iterator().next().getName()), true);
+        } else {
+            source.sendFeedback(() -> Text.translatable("commands.skill.terminate.success.multiple", targets.size()), true);
         }
 
         return targets.size();
