@@ -62,6 +62,10 @@ public final class SkillManager {
             return response;
         }
 
+        if (isCastingSkill() && !cancelCastingSkill()) {
+            return SkillResponse.inProgress();
+        }
+
         beginCastingSkill(skillInstance(skill));
         return response;
     }
