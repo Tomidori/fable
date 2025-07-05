@@ -23,6 +23,9 @@ public final class SkillTest implements ModInitializer {
                 // attribute test
                 instance.getSource().setVelocity(instance.getAttributes().getOrThrow("rotationVector"));
                 instance.getSource().velocityModified = true;
+
+                // cooldown test
+                instance.getSource().getSkillManager().setSkillCooldown(instance.getSkill(), 50);
             })
             .setTickBehavior(instance ->
                     LOGGER.info("Skill ticked")
