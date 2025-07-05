@@ -38,7 +38,7 @@ public final class SkillTest implements ModInitializer {
                 LOGGER.info("Skill interrupted");
                 return true;
             })
-            .setDuration(50)
+            .setInitialDuration(50)
             .build();
 
     @Override

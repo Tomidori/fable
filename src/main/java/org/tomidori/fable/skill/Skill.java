@@ -22,7 +22,7 @@ public final class Skill {
     private final SkillCondition condition;
     private final SkillCancelHandler cancelHandler;
     private final SkillInterruptHandler interruptHandler;
-    private final int duration;
+    private final int initialDuration;
 
     private @Nullable String translationKey;
     private @Nullable Text name;
@@ -35,7 +35,7 @@ public final class Skill {
             SkillCondition condition,
             SkillCancelHandler cancelHandler,
             SkillInterruptHandler interruptHandler,
-            int duration
+            int initialDuration
     ) {
         this.completeBehavior = Objects.requireNonNull(completeBehavior);
         this.endBehavior = Objects.requireNonNull(endBehavior);
@@ -44,7 +44,7 @@ public final class Skill {
         this.condition = Objects.requireNonNull(condition);
         this.cancelHandler = Objects.requireNonNull(cancelHandler);
         this.interruptHandler = Objects.requireNonNull(interruptHandler);
-        this.duration = duration;
+        this.initialDuration = initialDuration;
     }
 
     public static Builder builder() {
@@ -79,8 +79,8 @@ public final class Skill {
         return interruptHandler;
     }
 
-    public int getDuration() {
-        return duration;
+    public int getInitialDuration() {
+        return initialDuration;
     }
 
     public String getTranslationKey() {
@@ -107,7 +107,7 @@ public final class Skill {
         private SkillCondition condition = SkillCondition.defaultConditions();
         private SkillCancelHandler cancelHandler = SkillCancelHandler.alwaysAllow();
         private SkillInterruptHandler interruptHandler = SkillInterruptHandler.alwaysAllow();
-        private int duration = 0;
+        private int initialDuration = 0;
 
         private Builder() {
         }
@@ -147,8 +147,8 @@ public final class Skill {
             return this;
         }
 
-        public Builder setDuration(int duration) {
-            this.duration = duration;
+        public Builder setInitialDuration(int initialDuration) {
+            this.initialDuration = initialDuration;
             return this;
         }
 
@@ -161,7 +161,7 @@ public final class Skill {
                     condition,
                     cancelHandler,
                     interruptHandler,
-                    duration
+                    initialDuration
             );
         }
     }

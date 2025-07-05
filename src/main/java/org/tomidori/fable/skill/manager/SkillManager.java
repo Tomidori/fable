@@ -144,6 +144,6 @@ public final class SkillManager {
     }
 
     private SkillInstance skillInstance(RegistryEntry<Skill> skill) {
-        return new SkillInstance.Impl(skillContext(skill), AttributeBag.create(), skill.value().getDuration());
+        return new SkillInstance.Impl(skillContext(skill), AttributeBag.create(), skill.value().getInitialDuration());
     }
 }
