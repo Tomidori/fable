@@ -10,7 +10,7 @@ import org.tomidori.fable.entity.LivingEntityHook;
 
 @Mixin(value = ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
-    @Inject(method = "onDeath", at = @At("TAIL"))
+    @Inject(method = "onDeath", at = @At(value = "TAIL"))
     private void fable$onDeath(DamageSource source, CallbackInfo ci) {
         ((LivingEntityHook) this).getSkillManager().terminateCastingSkill();
     }
