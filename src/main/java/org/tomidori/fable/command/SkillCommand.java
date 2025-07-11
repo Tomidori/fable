@@ -40,6 +40,9 @@ public final class SkillCommand {
             Text.translatable("commands.skill.terminate.failure", entityName)
     );
 
+    private SkillCommand() {
+    }
+
     @ApiStatus.Internal
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(argumentSkill());
