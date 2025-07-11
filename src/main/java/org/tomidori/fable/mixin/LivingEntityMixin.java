@@ -13,6 +13,8 @@ import org.tomidori.fable.skill.manager.SkillContainer;
 import org.tomidori.fable.skill.manager.SkillCooldownManager;
 import org.tomidori.fable.skill.manager.SkillManager;
 
+import java.util.Objects;
+
 @Mixin(value = LivingEntity.class)
 public abstract class LivingEntityMixin implements LivingEntityHook {
     @Unique
@@ -37,7 +39,7 @@ public abstract class LivingEntityMixin implements LivingEntityHook {
     @SuppressWarnings("AddedMixinMembersNamePattern")
     @Override
     public void setSkillContainer(SkillContainer skillContainer) {
-        fable$skillContainer = skillContainer;
+        fable$skillContainer = Objects.requireNonNull(skillContainer);
     }
 
     @SuppressWarnings("AddedMixinMembersNamePattern")
@@ -49,7 +51,7 @@ public abstract class LivingEntityMixin implements LivingEntityHook {
     @SuppressWarnings("AddedMixinMembersNamePattern")
     @Override
     public void setSkillCooldownManager(SkillCooldownManager skillCooldownManager) {
-        fable$skillCooldownManager = skillCooldownManager;
+        fable$skillCooldownManager = Objects.requireNonNull(skillCooldownManager);
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))

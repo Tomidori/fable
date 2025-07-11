@@ -127,37 +127,37 @@ public final class Skill {
         }
 
         public Builder setCompleteBehavior(SkillCompleteBehavior completeBehavior) {
-            this.completeBehavior = completeBehavior;
+            this.completeBehavior = Objects.requireNonNull(completeBehavior);
             return this;
         }
 
         public Builder setEndBehavior(SkillEndBehavior endBehavior) {
-            this.endBehavior = endBehavior;
+            this.endBehavior = Objects.requireNonNull(endBehavior);
             return this;
         }
 
         public Builder setStartBehavior(SkillStartBehavior startBehavior) {
-            this.startBehavior = startBehavior;
+            this.startBehavior = Objects.requireNonNull(startBehavior);
             return this;
         }
 
         public Builder setTickBehavior(SkillTickBehavior tickBehavior) {
-            this.tickBehavior = tickBehavior;
+            this.tickBehavior = Objects.requireNonNull(tickBehavior);
             return this;
         }
 
         public Builder setCondition(SkillCondition condition) {
-            this.condition = condition;
+            this.condition = Objects.requireNonNull(condition);
             return this;
         }
 
         public Builder setCancelHandler(SkillCancelHandler cancelHandler) {
-            this.cancelHandler = cancelHandler;
+            this.cancelHandler = Objects.requireNonNull(cancelHandler);
             return this;
         }
 
         public Builder setInterruptHandler(SkillInterruptHandler interruptHandler) {
-            this.interruptHandler = interruptHandler;
+            this.interruptHandler = Objects.requireNonNull(interruptHandler);
             return this;
         }
 

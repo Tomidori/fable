@@ -4,6 +4,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.tomidori.fable.skill.SkillContext;
 import org.tomidori.fable.skill.SkillResponse;
 
+import java.util.Objects;
+
 @FunctionalInterface
 public interface SkillCondition {
     static SkillCondition alwaysSuccess() {
@@ -49,6 +51,7 @@ public interface SkillCondition {
 
     @ApiStatus.NonExtendable
     default SkillCondition and(SkillCondition other) {
+        Objects.requireNonNull(other);
         return context -> check(context) instanceof SkillResponse.Failure failure ?
                 failure :
                 other.check(context);
@@ -56,6 +59,7 @@ public interface SkillCondition {
 
     @ApiStatus.NonExtendable
     default SkillCondition or(SkillCondition other) {
+        Objects.requireNonNull(other);
         return context -> check(context) instanceof SkillResponse.Success success ?
                 success :
                 other.check(context);
