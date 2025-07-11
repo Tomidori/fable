@@ -121,9 +121,17 @@ public final class Skill {
         private Builder() {
         }
 
+        public @Nullable Identifier getCooldownGroup() {
+            return cooldownGroup;
+        }
+
         public Builder setCooldownGroup(@Nullable Identifier cooldownGroup) {
             this.cooldownGroup = cooldownGroup;
             return this;
+        }
+
+        public SkillCompleteBehavior getCompleteBehavior() {
+            return completeBehavior;
         }
 
         public Builder setCompleteBehavior(SkillCompleteBehavior completeBehavior) {
@@ -131,9 +139,17 @@ public final class Skill {
             return this;
         }
 
+        public SkillEndBehavior getEndBehavior() {
+            return endBehavior;
+        }
+
         public Builder setEndBehavior(SkillEndBehavior endBehavior) {
             this.endBehavior = Objects.requireNonNull(endBehavior);
             return this;
+        }
+
+        public SkillStartBehavior getStartBehavior() {
+            return startBehavior;
         }
 
         public Builder setStartBehavior(SkillStartBehavior startBehavior) {
@@ -141,9 +157,17 @@ public final class Skill {
             return this;
         }
 
+        public SkillTickBehavior getTickBehavior() {
+            return tickBehavior;
+        }
+
         public Builder setTickBehavior(SkillTickBehavior tickBehavior) {
             this.tickBehavior = Objects.requireNonNull(tickBehavior);
             return this;
+        }
+
+        public SkillCondition getCondition() {
+            return condition;
         }
 
         public Builder setCondition(SkillCondition condition) {
@@ -151,14 +175,26 @@ public final class Skill {
             return this;
         }
 
+        public SkillCancelHandler getCancelHandler() {
+            return cancelHandler;
+        }
+
         public Builder setCancelHandler(SkillCancelHandler cancelHandler) {
             this.cancelHandler = Objects.requireNonNull(cancelHandler);
             return this;
         }
 
+        public SkillInterruptHandler getInterruptHandler() {
+            return interruptHandler;
+        }
+
         public Builder setInterruptHandler(SkillInterruptHandler interruptHandler) {
             this.interruptHandler = Objects.requireNonNull(interruptHandler);
             return this;
+        }
+
+        public int getInitialDuration() {
+            return initialDuration;
         }
 
         public Builder setInitialDuration(int initialDuration) {
