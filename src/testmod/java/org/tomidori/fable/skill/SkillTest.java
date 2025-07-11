@@ -11,33 +11,33 @@ public final class SkillTest implements ModInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(SkillTest.class);
 
     private final Skill testSkill = Skill.builder()
-            .setStartBehavior(instance -> {
+            .setStartBehavior(context -> {
                 LOGGER.info("Skill started");
 
                 // attribute test
-                instance.getAttributes().set("rotationVector", instance.getSource().getRotationVector());
+                context.getAttributes().set("rotationVector", context.getSource().getRotationVector());
             })
-            .setCompleteBehavior(instance -> {
+            .setCompleteBehavior(context -> {
                 LOGGER.info("Skill completed");
 
                 // attribute test
-                instance.getSource().setVelocity(instance.getAttributes().getOrThrow("rotationVector"));
-                instance.getSource().velocityModified = true;
+                context.getSource().setVelocity(context.getAttributes().getOrThrow("rotationVector"));
+                context.getSource().velocityModified = true;
 
                 // cooldown test
-                instance.getSource().getSkillCooldownManager().setCooldown(instance.getSkill(), 50);
+                context.getSource().getSkillCooldownManager().setCooldown(context.getSkill(), 50);
             })
-            .setTickBehavior(instance ->
+            .setTickBehavior(context ->
                     LOGGER.info("Skill ticked")
             )
-            .setEndBehavior(instance ->
+            .setEndBehavior(context ->
                     LOGGER.info("Skill ended")
             )
-            .setCancelHandler(instance -> {
+            .setCancelHandler(context -> {
                 LOGGER.info("Skill canceled");
                 return true;
             })
-            .setInterruptHandler(instance -> {
+            .setInterruptHandler(context -> {
                 LOGGER.info("Skill interrupted");
                 return true;
             })

@@ -7,7 +7,7 @@ import org.tomidori.fable.core.AttributeBag;
 
 import java.util.Objects;
 
-public interface SkillInstance extends SkillContext {
+public interface SkillExecutionContext extends SkillContext {
     AttributeBag getAttributes();
 
     int getDuration();
@@ -15,7 +15,7 @@ public interface SkillInstance extends SkillContext {
     void setDuration(int duration);
 
     @ApiStatus.Internal
-    final class Impl implements SkillInstance {
+    final class Impl implements SkillExecutionContext {
         private final SkillContext context;
         private final AttributeBag attributes;
         private int duration;

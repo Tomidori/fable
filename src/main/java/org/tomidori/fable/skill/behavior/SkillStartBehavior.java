@@ -1,24 +1,24 @@
 package org.tomidori.fable.skill.behavior;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.tomidori.fable.skill.SkillInstance;
+import org.tomidori.fable.skill.SkillExecutionContext;
 
 import java.util.Objects;
 
 @FunctionalInterface
 public interface SkillStartBehavior {
     static SkillStartBehavior noOp() {
-        return instance -> {};
+        return context -> {};
     }
 
-    void onStart(SkillInstance instance);
+    void onStart(SkillExecutionContext context);
 
     @ApiStatus.NonExtendable
     default SkillStartBehavior andThen(SkillStartBehavior after) {
         Objects.requireNonNull(after);
-        return instance -> {
-            onStart(instance);
-            after.onStart(instance);
+        return context -> {
+            onStart(context);
+            after.onStart(context);
         };
     }
 }
