@@ -40,6 +40,10 @@ java {
     }
 }
 
+kotlin {
+    explicitApi()
+}
+
 publishing {
     publications {
         maven(MavenPublication) {

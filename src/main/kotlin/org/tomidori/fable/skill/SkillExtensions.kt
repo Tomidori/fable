@@ -8,25 +8,25 @@ import org.tomidori.fable.skill.condition.SkillCondition
 import org.tomidori.fable.skill.handler.SkillCancelHandler
 import org.tomidori.fable.skill.handler.SkillInterruptHandler
 
-inline fun Skill(builderAction: Skill.Builder.() -> Unit): Skill = Skill.builder().apply(builderAction).build()
+public inline fun Skill(builderAction: Skill.Builder.() -> Unit): Skill = Skill.builder().apply(builderAction).build()
 
-inline fun Skill.Builder.completeBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
+public inline fun Skill.Builder.completeBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
     setCompleteBehavior(SkillCompleteBehavior(block))
 
-inline fun Skill.Builder.endBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
+public inline fun Skill.Builder.endBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
     setEndBehavior(SkillEndBehavior(block))
 
-inline fun Skill.Builder.startBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
+public inline fun Skill.Builder.startBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
     setStartBehavior(SkillStartBehavior(block))
 
-inline fun Skill.Builder.tickBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
+public inline fun Skill.Builder.tickBehavior(crossinline block: SkillExecutionContext.() -> Unit): Skill.Builder =
     setTickBehavior(SkillTickBehavior(block))
 
-inline fun Skill.Builder.condition(crossinline block: SkillContext.() -> SkillResponse): Skill.Builder =
+public inline fun Skill.Builder.condition(crossinline block: SkillContext.() -> SkillResponse): Skill.Builder =
     setCondition(SkillCondition(block))
 
-inline fun Skill.Builder.cancelHandler(crossinline block: SkillExecutionContext.() -> Boolean): Skill.Builder =
+public inline fun Skill.Builder.cancelHandler(crossinline block: SkillExecutionContext.() -> Boolean): Skill.Builder =
     setCancelHandler(SkillCancelHandler(block))
 
-inline fun Skill.Builder.interruptHandler(crossinline block: SkillExecutionContext.() -> Boolean): Skill.Builder =
+public inline fun Skill.Builder.interruptHandler(crossinline block: SkillExecutionContext.() -> Boolean): Skill.Builder =
     setInterruptHandler(SkillInterruptHandler(block))
