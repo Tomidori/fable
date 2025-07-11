@@ -15,7 +15,7 @@ public interface SkillCondition {
     }
 
     static SkillCondition requireCooldownReady() {
-        return context -> context.getSource().getSkillManager().hasSkillCooldown(context.getSkill()) ?
+        return context -> context.getSource().getSkillCooldownManager().isCoolingDown(context.getSkill()) ?
                 SkillResponse.onCooldown() :
                 SkillResponse.success();
     }

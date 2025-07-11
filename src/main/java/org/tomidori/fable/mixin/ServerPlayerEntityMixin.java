@@ -14,4 +14,9 @@ public abstract class ServerPlayerEntityMixin {
     private void fable$onDeath(DamageSource source, CallbackInfo ci) {
         ((LivingEntityHook) this).getSkillManager().terminateCastingSkill();
     }
+
+    @Inject(method = "copyFrom", at = @At(value = "TAIL"))
+    private void fable$copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        ((LivingEntityHook) this).setSkillCooldownManager(oldPlayer.getSkillCooldownManager());
+    }
 }

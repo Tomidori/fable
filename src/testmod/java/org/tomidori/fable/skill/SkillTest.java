@@ -25,7 +25,7 @@ public final class SkillTest implements ModInitializer {
                 instance.getSource().velocityModified = true;
 
                 // cooldown test
-                instance.getSource().getSkillManager().setSkillCooldown(instance.getSkill(), 50);
+                instance.getSource().getSkillCooldownManager().setCooldown(instance.getSkill(), 50);
             })
             .setTickBehavior(instance ->
                     LOGGER.info("Skill ticked")
