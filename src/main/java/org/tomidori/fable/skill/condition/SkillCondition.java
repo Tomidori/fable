@@ -40,8 +40,8 @@ public interface SkillCondition {
 
     static SkillCondition defaultConditions() {
         return requireCooldownReady()
-                .and(requireSkillLearned())
                 .and(requireNotCasting())
+                .and(requireSkillLearned())
                 .and(requireInGame());
     }
 
