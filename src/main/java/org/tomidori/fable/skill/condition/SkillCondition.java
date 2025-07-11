@@ -26,6 +26,12 @@ public interface SkillCondition {
                 SkillResponse.success();
     }
 
+    static SkillCondition requireSkillLearned() {
+        return context -> context.getSource().getSkillContainer().hasSkill(context.getSkill()) ?
+                SkillResponse.success() :
+                SkillResponse.notLearned();
+    }
+
     static SkillCondition requireInGame() {
         return context -> context.getSource().isPartOfGame() ?
                 SkillResponse.success() :
@@ -34,6 +40,7 @@ public interface SkillCondition {
 
     static SkillCondition defaultConditions() {
         return requireCooldownReady()
+                .and(requireSkillLearned())
                 .and(requireNotCasting())
                 .and(requireInGame());
     }

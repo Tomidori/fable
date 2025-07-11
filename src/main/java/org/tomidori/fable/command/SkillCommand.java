@@ -3,6 +3,7 @@ package org.tomidori.fable.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.Dynamic2CommandExceptionType;
 import com.mojang.brigadier.exceptions.Dynamic3CommandExceptionType;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.minecraft.command.CommandSource;
@@ -30,6 +31,12 @@ public final class SkillCommand {
     private static final DynamicCommandExceptionType FAILED_ENTITY_EXCEPTION = new DynamicCommandExceptionType(entityName ->
             Text.translatable("commands.skill.failed.entity", entityName)
     );
+    private static final Dynamic2CommandExceptionType ADD_FAILURE_EXCEPTION = new Dynamic2CommandExceptionType((entityName, skillName) ->
+            Text.translatable("commands.skill.add.failure", entityName, skillName)
+    );
+    private static final Dynamic2CommandExceptionType REMOVE_FAILURE_EXCEPTION = new Dynamic2CommandExceptionType((entityName, skillName) ->
+            Text.translatable("commands.skill.remove.failure", entityName, skillName)
+    );
     private static final Dynamic3CommandExceptionType TEST_FAILURE_EXCEPTION = new Dynamic3CommandExceptionType((entityName, skillName, reason) ->
             Text.translatable("commands.skill.test.failure", entityName, skillName, reason)
     );
@@ -51,9 +58,71 @@ public final class SkillCommand {
     private static LiteralArgumentBuilder<ServerCommandSource> argumentSkill() {
         return CommandManager.literal("skill")
                 .requires(source -> source.hasPermissionLevel(2))
+                .then(argumentAdd())
+                .then(argumentRemove())
                 .then(argumentTest())
                 .then(argumentCast())
                 .then(argumentTerminate());
+    }
+
+    private static LiteralArgumentBuilder<ServerCommandSource> argumentAdd() {
+        return CommandManager.literal("add")
+                .then(
+                        CommandManager.argument("skill", IdentifierArgumentType.identifier())
+                                .suggests((context, builder) ->
+                                        CommandSource.suggestIdentifiers(
+                                                FableRegistries.SKILL.getIds(),
+                                                builder
+                                        )
+                                )
+                                .executes(context ->
+                                        executeAdd(
+                                                context.getSource(),
+                                                getSkill(IdentifierArgumentType.getIdentifier(context, "skill")),
+                                                List.of(context.getSource().getEntityOrThrow())
+                                        )
+                                )
+                                .then(
+                                        CommandManager.argument("targets", EntityArgumentType.entities())
+                                                .executes(context ->
+                                                        executeAdd(
+                                                                context.getSource(),
+                                                                getSkill(IdentifierArgumentType.getIdentifier(context, "skill")),
+                                                                EntityArgumentType.getEntities(context, "targets")
+                                                        )
+                                                )
+                                )
+                );
+    }
+
+    private static LiteralArgumentBuilder<ServerCommandSource> argumentRemove() {
+        return CommandManager.literal("remove")
+                .then(
+                        CommandManager.argument("skill", IdentifierArgumentType.identifier())
+                                .suggests((context, builder) ->
+                                        CommandSource.suggestIdentifiers(
+                                                FableRegistries.SKILL.getIds(),
+                                                builder
+                                        )
+                                )
+                                .executes(context ->
+                                        executeRemove(
+                                                context.getSource(),
+                                                getSkill(IdentifierArgumentType.getIdentifier(context, "skill")),
+                                                List.of(context.getSource().getEntityOrThrow())
+                                        )
+                                )
+                                .then(
+                                        CommandManager.argument("targets", EntityArgumentType.entities())
+                                                .executes(context ->
+                                                        executeRemove(
+                                                                context.getSource(),
+                                                                getSkill(IdentifierArgumentType.getIdentifier(context, "skill")),
+                                                                EntityArgumentType.getEntities(context, "targets")
+                                                        )
+                                                )
+                                )
+                );
     }
 
     private static LiteralArgumentBuilder<ServerCommandSource> argumentTest() {
@@ -133,6 +202,46 @@ public final class SkillCommand {
                                         )
                                 )
                 );
+    }
+
+    private static int executeAdd(
+            ServerCommandSource source,
+            RegistryEntry<Skill> skill,
+            Collection<? extends Entity> targets
+    ) throws CommandSyntaxException {
+        for (Entity target : targets) {
+            if (!getLivingEntity(target).getSkillContainer().addSkill(skill)) {
+                throw ADD_FAILURE_EXCEPTION.create(target.getName(), skill.value().getName());
+            }
+        }
+
+        if (targets.size() == 1) {
+            source.sendFeedback(() -> Text.translatable("commands.skill.add.success.single", targets.iterator().next().getName(), skill.value().getName()), true);
+        } else {
+            source.sendFeedback(() -> Text.translatable("commands.skill.add.success.multiple", targets.size(), skill.value().getName()), true);
+        }
+
+        return targets.size();
+    }
+
+    private static int executeRemove(
+            ServerCommandSource source,
+            RegistryEntry<Skill> skill,
+            Collection<? extends Entity> targets
+    ) throws CommandSyntaxException {
+        for (Entity target : targets) {
+            if (!getLivingEntity(target).getSkillContainer().removeSkill(skill)) {
+                throw REMOVE_FAILURE_EXCEPTION.create(target.getName(), skill.value().getName());
+            }
+        }
+
+        if (targets.size() == 1) {
+            source.sendFeedback(() -> Text.translatable("commands.skill.remove.success.single", targets.iterator().next().getName(), skill.value().getName()), true);
+        } else {
+            source.sendFeedback(() -> Text.translatable("commands.skill.remove.success.multiple", targets.size(), skill.value().getName()), true);
+        }
+
+        return targets.size();
     }
 
     private static int executeTest(

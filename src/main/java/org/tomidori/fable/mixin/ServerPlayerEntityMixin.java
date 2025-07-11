@@ -17,6 +17,11 @@ public abstract class ServerPlayerEntityMixin {
 
     @Inject(method = "copyFrom", at = @At(value = "TAIL"))
     private void fable$copyFrom(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
-        ((LivingEntityHook) this).setSkillCooldownManager(oldPlayer.getSkillCooldownManager());
+        if (!(this instanceof LivingEntityHook hook)) {
+            return;
+        }
+
+        hook.setSkillContainer(oldPlayer.getSkillContainer());
+        hook.setSkillCooldownManager(oldPlayer.getSkillCooldownManager());
     }
 }

@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.tomidori.fable.entity.LivingEntityHook;
+import org.tomidori.fable.skill.manager.SkillContainer;
 import org.tomidori.fable.skill.manager.SkillCooldownManager;
 import org.tomidori.fable.skill.manager.SkillManager;
 
@@ -17,12 +18,26 @@ public abstract class LivingEntityMixin implements LivingEntityHook {
     @Unique
     private final SkillManager fable$skillManager = new SkillManager(Suppliers.memoize(() -> (LivingEntity) (Object) this));
     @Unique
+    private SkillContainer fable$skillContainer = new SkillContainer();
+    @Unique
     private SkillCooldownManager fable$skillCooldownManager = new SkillCooldownManager();
 
     @SuppressWarnings("AddedMixinMembersNamePattern")
     @Override
     public SkillManager getSkillManager() {
         return fable$skillManager;
+    }
+
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public SkillContainer getSkillContainer() {
+        return fable$skillContainer;
+    }
+
+    @SuppressWarnings("AddedMixinMembersNamePattern")
+    @Override
+    public void setSkillContainer(SkillContainer skillContainer) {
+        fable$skillContainer = skillContainer;
     }
 
     @SuppressWarnings("AddedMixinMembersNamePattern")

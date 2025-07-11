@@ -11,8 +11,11 @@ import org.tomidori.fable.entity.LivingEntityHook;
 public abstract class EntityMixin {
     @Inject(method = "copyFrom", at = @At(value = "TAIL"))
     private void fable$copyFrom(Entity original, CallbackInfo ci) {
-        if (this instanceof LivingEntityHook && original instanceof LivingEntityHook) {
-            ((LivingEntityHook) this).setSkillCooldownManager(((LivingEntityHook) original).getSkillCooldownManager());
+        if (!(this instanceof LivingEntityHook target) || !(original instanceof LivingEntityHook source)) {
+            return;
         }
+
+        target.setSkillContainer(source.getSkillContainer());
+        target.setSkillCooldownManager(source.getSkillCooldownManager());
     }
 }

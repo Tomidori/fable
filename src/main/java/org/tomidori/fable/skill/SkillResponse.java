@@ -21,6 +21,10 @@ public interface SkillResponse {
         return failure(Text.translatable("skill.failure.inProgress"));
     }
 
+    static Failure notLearned() {
+        return failure(Text.translatable("skill.failure.notLearned"));
+    }
+
     static Failure unavailable() {
         return failure(Text.translatable("skill.failure.unavailable"));
     }
