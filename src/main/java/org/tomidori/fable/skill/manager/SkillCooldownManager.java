@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public final class SkillCooldownManager {
-    private final Map<Identifier, Record> cooldownMap = new HashMap<>();
+    private final Map<Identifier, Record> records = new HashMap<>();
     private long time;
 
     @ApiStatus.Internal
@@ -30,7 +30,7 @@ public final class SkillCooldownManager {
 
     public long getRemainingTime(Identifier id) {
         Objects.requireNonNull(id);
-        Record record = cooldownMap.get(id);
+        Record record = records.get(id);
         if (record == null) {
             return 0;
         }
@@ -46,7 +46,7 @@ public final class SkillCooldownManager {
 
     public float getCooldownProgress(Identifier id) {
         Objects.requireNonNull(id);
-        Record record = cooldownMap.get(id);
+        Record record = records.get(id);
         if (record == null) {
             return 1.0f;
         }
@@ -63,11 +63,11 @@ public final class SkillCooldownManager {
     public void setCooldown(Identifier id, long duration) {
         Objects.requireNonNull(id);
         if (duration <= 0) {
-            cooldownMap.remove(id);
+            records.remove(id);
             return;
         }
 
-        cooldownMap.put(id, new Record(time, time + duration));
+        records.put(id, new Record(time, time + duration));
     }
 
     public void setCooldown(RegistryEntry<Skill> skill, long duration) {
@@ -78,7 +78,7 @@ public final class SkillCooldownManager {
     @ApiStatus.Internal
     public void update() {
         time++;
-        cooldownMap.entrySet().removeIf(entry -> entry.getValue().endTime <= time);
+        records.entrySet().removeIf(entry -> entry.getValue().endTime <= time);
     }
 
     private Identifier getId(RegistryEntry<Skill> skill) {

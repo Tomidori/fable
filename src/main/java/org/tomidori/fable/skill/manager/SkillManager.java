@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public final class SkillManager {
     private final Supplier<LivingEntity> entitySupplier;
 
-    private @Nullable SkillExecutionContext skillExecutionContext;
+    private @Nullable SkillExecutionContext executionContext;
 
     @ApiStatus.Internal
     public SkillManager(Supplier<LivingEntity> entitySupplier) {
@@ -24,11 +24,11 @@ public final class SkillManager {
     }
 
     public boolean isCastingSkill() {
-        return skillExecutionContext != null;
+        return executionContext != null;
     }
 
     public @Nullable SkillExecutionContext getSkillExecutionContext() {
-        return skillExecutionContext;
+        return executionContext;
     }
 
     public SkillResponse canCastSkill(RegistryEntry<Skill> skill) {
@@ -53,12 +53,12 @@ public final class SkillManager {
 
     public boolean cancelCastingSkill() {
         return isCastingSkill() &&
-                stopCastingSkill(skillExecutionContext, false);
+                stopCastingSkill(executionContext, false);
     }
 
     public boolean interruptCastingSkill() {
         return isCastingSkill() &&
-                stopCastingSkill(skillExecutionContext, true);
+                stopCastingSkill(executionContext, true);
     }
 
     public boolean terminateCastingSkill() {
@@ -66,47 +66,47 @@ public final class SkillManager {
             return false;
         }
 
-        endCastingSkill(skillExecutionContext);
+        endCastingSkill(executionContext);
         return true;
     }
 
     @ApiStatus.Internal
     public void update() {
         if (isCastingSkill()) {
-            updateCastingSkill(skillExecutionContext);
+            updateCastingSkill(executionContext);
         }
     }
 
-    private void beginCastingSkill(SkillExecutionContext skillExecutionContext) {
-        this.skillExecutionContext = skillExecutionContext;
-        skillExecutionContext.getSkill().value().getStartBehavior().onStart(skillExecutionContext);
+    private void beginCastingSkill(SkillExecutionContext executionContext) {
+        this.executionContext = executionContext;
+        executionContext.getSkill().value().getStartBehavior().onStart(executionContext);
     }
 
-    private void endCastingSkill(SkillExecutionContext skillExecutionContext) {
-        skillExecutionContext.getSkill().value().getEndBehavior().onEnd(skillExecutionContext);
-        this.skillExecutionContext = null;
+    private void endCastingSkill(SkillExecutionContext executionContext) {
+        executionContext.getSkill().value().getEndBehavior().onEnd(executionContext);
+        this.executionContext = null;
     }
 
-    private boolean stopCastingSkill(SkillExecutionContext skillExecutionContext, boolean force) {
+    private boolean stopCastingSkill(SkillExecutionContext executionContext, boolean force) {
         boolean shouldStop = force ?
-                skillExecutionContext.getSkill().value().getInterruptHandler().shouldInterrupt(skillExecutionContext) :
-                skillExecutionContext.getSkill().value().getCancelHandler().shouldCancel(skillExecutionContext);
+                executionContext.getSkill().value().getInterruptHandler().shouldInterrupt(executionContext) :
+                executionContext.getSkill().value().getCancelHandler().shouldCancel(executionContext);
 
         if (!shouldStop) {
             return false;
         }
 
-        endCastingSkill(skillExecutionContext);
+        endCastingSkill(executionContext);
         return true;
     }
 
-    private void updateCastingSkill(SkillExecutionContext skillExecutionContext) {
-        skillExecutionContext.setDuration(skillExecutionContext.getDuration() - 1);
-        if (skillExecutionContext.getDuration() > 0) {
-            skillExecutionContext.getSkill().value().getTickBehavior().onTick(skillExecutionContext);
+    private void updateCastingSkill(SkillExecutionContext executionContext) {
+        executionContext.setDuration(executionContext.getDuration() - 1);
+        if (executionContext.getDuration() > 0) {
+            executionContext.getSkill().value().getTickBehavior().onTick(executionContext);
         } else {
-            skillExecutionContext.getSkill().value().getCompleteBehavior().onComplete(skillExecutionContext);
-            endCastingSkill(skillExecutionContext);
+            executionContext.getSkill().value().getCompleteBehavior().onComplete(executionContext);
+            endCastingSkill(executionContext);
         }
     }
 
