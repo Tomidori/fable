@@ -16,7 +16,7 @@ import org.tomidori.fable.skill.manager.SkillManager;
 @Mixin(value = LivingEntity.class)
 public abstract class LivingEntityMixin implements LivingEntityHook {
     @Unique
-    private final SkillManager fable$skillManager = new SkillManager(Suppliers.memoize(() -> (LivingEntity) (Object) this));
+    private final SkillManager fable$skillManager = new SkillManager(Suppliers.memoize(this::fable$livingEntity));
     @Unique
     private SkillContainer fable$skillContainer = new SkillContainer();
     @Unique
@@ -61,5 +61,10 @@ public abstract class LivingEntityMixin implements LivingEntityHook {
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "net/minecraft/world/World.sendEntityStatus(Lnet/minecraft/entity/Entity;B)V"))
     private void fable$onDeath(DamageSource damageSource, CallbackInfo ci) {
         fable$skillManager.terminateCastingSkill();
+    }
+
+    @Unique
+    private LivingEntity fable$livingEntity() {
+        return (LivingEntity) (Object) this;
     }
 }
