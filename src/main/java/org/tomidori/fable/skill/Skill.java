@@ -1,6 +1,7 @@
 package org.tomidori.fable.skill;
 
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.tomidori.fable.registry.FableRegistries;
@@ -15,6 +16,7 @@ import org.tomidori.fable.skill.handler.SkillInterruptHandler;
 import java.util.Objects;
 
 public final class Skill {
+    private final @Nullable Identifier cooldownGroup;
     private final SkillCompleteBehavior completeBehavior;
     private final SkillEndBehavior endBehavior;
     private final SkillStartBehavior startBehavior;
@@ -28,6 +30,7 @@ public final class Skill {
     private @Nullable Text name;
 
     private Skill(
+            @Nullable Identifier cooldownGroup,
             SkillCompleteBehavior completeBehavior,
             SkillEndBehavior endBehavior,
             SkillStartBehavior startBehavior,
@@ -37,6 +40,7 @@ public final class Skill {
             SkillInterruptHandler interruptHandler,
             int initialDuration
     ) {
+        this.cooldownGroup = cooldownGroup;
         this.completeBehavior = Objects.requireNonNull(completeBehavior);
         this.endBehavior = Objects.requireNonNull(endBehavior);
         this.startBehavior = Objects.requireNonNull(startBehavior);
@@ -49,6 +53,10 @@ public final class Skill {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public @Nullable Identifier getCooldownGroup() {
+        return cooldownGroup;
     }
 
     public SkillCompleteBehavior getCompleteBehavior() {
@@ -100,6 +108,7 @@ public final class Skill {
     }
 
     public static final class Builder {
+        private @Nullable Identifier cooldownGroup = null;
         private SkillCompleteBehavior completeBehavior = SkillCompleteBehavior.noOp();
         private SkillEndBehavior endBehavior = SkillEndBehavior.noOp();
         private SkillStartBehavior startBehavior = SkillStartBehavior.noOp();
@@ -110,6 +119,11 @@ public final class Skill {
         private int initialDuration = 0;
 
         private Builder() {
+        }
+
+        public Builder setCooldownGroup(@Nullable Identifier cooldownGroup) {
+            this.cooldownGroup = cooldownGroup;
+            return this;
         }
 
         public Builder setCompleteBehavior(SkillCompleteBehavior completeBehavior) {
@@ -154,6 +168,7 @@ public final class Skill {
 
         public Skill build() {
             return new Skill(
+                    cooldownGroup,
                     completeBehavior,
                     endBehavior,
                     startBehavior,

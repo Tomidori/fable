@@ -25,9 +25,7 @@ public final class SkillCooldownManager {
 
     public boolean isCoolingDown(RegistryEntry<Skill> skill) {
         Objects.requireNonNull(skill);
-        return isCoolingDown(
-                FableRegistries.SKILL.getId(skill.value())
-        );
+        return isCoolingDown(getId(skill));
     }
 
     public long getRemainingTime(Identifier id) {
@@ -43,9 +41,7 @@ public final class SkillCooldownManager {
 
     public long getRemainingTime(RegistryEntry<Skill> skill) {
         Objects.requireNonNull(skill);
-        return getRemainingTime(
-                FableRegistries.SKILL.getId(skill.value())
-        );
+        return getRemainingTime(getId(skill));
     }
 
     public float getCooldownProgress(Identifier id) {
@@ -61,9 +57,7 @@ public final class SkillCooldownManager {
 
     public float getCooldownProgress(RegistryEntry<Skill> skill) {
         Objects.requireNonNull(skill);
-        return getCooldownProgress(
-                FableRegistries.SKILL.getId(skill.value())
-        );
+        return getCooldownProgress(getId(skill));
     }
 
     public void setCooldown(Identifier id, long duration) {
@@ -78,16 +72,20 @@ public final class SkillCooldownManager {
 
     public void setCooldown(RegistryEntry<Skill> skill, long duration) {
         Objects.requireNonNull(skill);
-        setCooldown(
-                FableRegistries.SKILL.getId(skill.value()),
-                duration
-        );
+        setCooldown(getId(skill), duration);
     }
 
     @ApiStatus.Internal
     public void update() {
         time++;
         cooldownMap.entrySet().removeIf(entry -> entry.getValue().endTime <= time);
+    }
+
+    private Identifier getId(RegistryEntry<Skill> skill) {
+        Identifier cooldownGroup = skill.value().getCooldownGroup();
+        return cooldownGroup == null ?
+                FableRegistries.SKILL.getId(skill.value()) :
+                cooldownGroup;
     }
 
     private record Record(long startTime, long endTime) {
