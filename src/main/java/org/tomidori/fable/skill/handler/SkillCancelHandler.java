@@ -1,7 +1,7 @@
 package org.tomidori.fable.skill.handler;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.tomidori.fable.skill.SkillExecutionContext;
+import org.tomidori.fable.skill.SkillContext;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public interface SkillCancelHandler {
         return context -> false;
     }
 
-    boolean shouldCancel(SkillExecutionContext context);
+    boolean shouldCancel(SkillContext context);
 
     @ApiStatus.NonExtendable
     default SkillCancelHandler and(SkillCancelHandler other) {

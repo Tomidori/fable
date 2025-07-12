@@ -1,7 +1,7 @@
 package org.tomidori.fable.skill.handler;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.tomidori.fable.skill.SkillExecutionContext;
+import org.tomidori.fable.skill.SkillContext;
 
 import java.util.Objects;
 
@@ -15,7 +15,7 @@ public interface SkillInterruptHandler {
         return context -> false;
     }
 
-    boolean shouldInterrupt(SkillExecutionContext context);
+    boolean shouldInterrupt(SkillContext context);
 
     @ApiStatus.NonExtendable
     default SkillInterruptHandler and(SkillInterruptHandler other) {

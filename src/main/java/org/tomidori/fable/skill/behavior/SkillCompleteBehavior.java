@@ -1,7 +1,7 @@
 package org.tomidori.fable.skill.behavior;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.tomidori.fable.skill.SkillExecutionContext;
+import org.tomidori.fable.skill.SkillContext;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ public interface SkillCompleteBehavior {
         return context -> {};
     }
 
-    void onComplete(SkillExecutionContext context);
+    void onComplete(SkillContext context);
 
     @ApiStatus.NonExtendable
     default SkillCompleteBehavior andThen(SkillCompleteBehavior after) {
