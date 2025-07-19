@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "fable",
+  "version": "${version}",
+  "name": "Fable",
+  "description": "Library for creating server-side skills",
+  "authors": [
+    "Tomidori"
+  ],
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.tomidori.fable.FableMod"
+    ]
+  },
+  "mixins": [
+    "fable.mixins.json"
+  ],
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/class_1309": [
+        "org/tomidori/fable/entity/LivingEntityHook"
+      ]
+    }
+  },
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric-api": ">=${fabric_api_version}"
+  }
+}

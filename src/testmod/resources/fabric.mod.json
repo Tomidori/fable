@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "fable-testmod",
+  "version": "${version}",
+  "authors": [
+    "Tomidori"
+  ],
+  "license": "Apache-2.0",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.tomidori.fable.skill.state.target.BlockRaycastStateFactoryTest",
+      "org.tomidori.fable.skill.state.target.EntityRaycastStateFactoryTest",
+      "org.tomidori.fable.skill.SkillTest"
+    ]
+  },
+  "depends": {
+    "fable": "${version}"
+  }
+}
